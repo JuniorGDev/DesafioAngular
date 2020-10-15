@@ -3,7 +3,7 @@
 </mat-toolbar>
 
 <mat-nav-list>
-    <mat-list-item>
-        <a matLine href="x">Nome</a>
+    <mat-list-item *ngFor="let senador of senadores">
+        <a matLine [routerLink]="['/senadores', senador.id]">{{senador.nomeSenador}}</a>
     </mat-list-item>
 </mat-nav-list>
