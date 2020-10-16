@@ -2,21 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 export interface Senador {
-  id: number,
-  nomeSenador: string
+  id: number;
+  nomeSenador: string;
 }
 
-export interface DespesasSenador{
-  id: number,
-  nomeSenador: string,
-  despesas: {
-    tipo: number,
-    fornec: string,
-    ano: number,
-    mes: number,
-    dia: number,
-    valor: number
-  }
+export interface Despesa{
+  tipo: number;
+  fornec: string;
+  ano: number;
+  mes: number;
+  dia: number;
+  valor: number;
+}
+
+export interface DespesaSenador{
+  valor: number;
+  id: number;
+  nomeSenador: string;
+  despesas: Despesa[];
 }
 
 export const tipos = {
@@ -43,6 +46,10 @@ export class SenadoresService {
   }
 
   buscarSenador(id: number){
-    return this.http.get<DespesasSenador>(`${urlBase}/senadores/${id}`);
+    return this.http.get<DespesaSenador>(`${urlBase}/despesasSenadores/${id}`);
+  }
+
+  formatTipo(tipo: number): string {
+    return tipos[tipo];
   }
 }

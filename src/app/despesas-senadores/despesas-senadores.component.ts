@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DespesasSenador, SenadoresService } from '../senadores.service';
+import { Despesa, SenadoresService } from '../senadores.service';
 
 @Component({
   selector: 'app-despesas-senadores',
@@ -9,20 +9,37 @@ import { DespesasSenador, SenadoresService } from '../senadores.service';
 })
 export class DespesasSenadoresComponent implements OnInit {
 
-  despesasSenadores: DespesasSenador[] = [];
+  nomeSenador: string = '';
+  despesas: Despesa[] = [];
+  despesasPorTipo: { tipo: number, total: number }[] = [];
 
-  id: number;
-
-  constructor(private senadoresService: SenadoresService, private route: ActivatedRoute) { }
+  constructor(private senadoresService: SenadoresService, private route: ActivatedRoute) { 
+  }
   
   ngOnInit(): void {
     this.route.paramMap.subscribe(paramMap => {
-      this.id = parseInt(paramMap.get('id'));
-      this.senadoresService.buscarSenador(this.id)
+      const id = parseInt(paramMap.get('id'));
+      this.senadoresService.buscarSenador(id)
       .subscribe(despesasSenador => {
-        this.despesasSenadores = despesasSenador;
-      })
+        this.nomeSenador = despesasSenador.nomeSenador;
+        this.despesas = despesasSenador.despesas;
+        this.despesasPorTipo = calcularDespesasPorTipo(this.despesas);
+      });
     });
   }
 
+  calculaTotal(): number {
+    return this.despesasPorTipo.reduce((total, item) => total + item.total, 0);
+  }
 }
+
+  function calcularDespesasPorTipo(despesas: Despesa[]) {
+    let resultado: {tipo: number, total: number}[] = [];
+    for(let i = 1; i <= 7; i++){
+      const valorTotal = despesas
+      .filter(d => d.tipo === i)
+      .reduce((total, despesa) => total + despesa.valor, 0);
+      resultado[i - 1] = { tipo: i, total: valorTotal};
+    }
+    return resultado;
+  }

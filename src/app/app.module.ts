@@ -16,13 +16,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatListModule} from '@angular/material/list';
 import {MatTableModule} from '@angular/material/table';
+import { DescTipoPipe } from './desc-tipo.pipe';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     SenadoresComponent,
-    DespesasSenadoresComponent
+    DespesasSenadoresComponent,
+    DescTipoPipe
   ],
   imports: [
     BrowserModule,
